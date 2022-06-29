@@ -15,9 +15,25 @@ class Entrega(BaseModel):
     rua = db.Column(db.String(100))
     numero = db.Column(db.String(5))
     complemento = db.Column(db.String(100))
+    ponto_de_referencia = db.Column(db.String(100))
+    hora_da_entrega = db.Column(db.String(5))
+    data_da_entrega = db.Column(db.String(10))
 
     # Relacionametos
     
-    '''entregador 
-    cliente 
-    produto''' 
+    # muito para muito
+    entregadores = db.relationship("Entregador", secondary="entregador_entrega", backref="entrega_dos_entregadores")
+    
+    # 1 para 1
+    clientes = db.Column(db.Integer, db.ForeignKey("cliente.id"))
+
+    # 1 para muitos
+    produtos = db.Column(db.Integer, db.ForeignKey("produto.id"))
+
+class EntregadorEntrega(BaseModel):
+    __tablename__ = "entregador_entrega"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    entregadores = db.Column(db.Integer, db.ForeignKey("entregador.id"))
+    entrega_mercado = db.Column(db.Integer, db.ForeignKey("entrega.id"))

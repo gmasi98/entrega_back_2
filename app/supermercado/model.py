@@ -14,13 +14,17 @@ class Supermercado(BaseModel):
     # Atributos próprios
     nome = db.Column(db.String(100))
     endereco = db.Column(db.String(100))
-    telefone = db.Column()
+    telefone = db.Column(db.Column(db.String(11)))
+    horario_de_funcionamento = db.Column(db.String(5))
+    dias_de_funcionamento = db.Column(db.String(100))
 
     # Relacionamentos
-    clientes = db.relationship("Cliente", backref="supermercado")
-    entregadores = db.relationship("Entregador", backref="supermercado")
-    produtos = db.relationship("Produto", backref="supermercado")
-    suportes = db.relationship("Suporte", backref="supermercado")
+    
+    # Relação de 1 para muitos  
+    clientes = db.relationship("Cliente", backref='supermercado')
+    entregadores = db.relationship("Entregador", backref='supermercado')
+    produtos = db.relationship("Produto", backref='supermercado')
+    suportes = db.relationship("Suporte", backref='supermercado')
     
 
 

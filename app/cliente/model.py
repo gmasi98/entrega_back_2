@@ -15,7 +15,8 @@ class Cliente(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     
     # Atributos próprios da classe 
-    nome = db.Column(db.Strig(100))
+
+    nome = db.Column(db.String(100))
     data_de_nascimento = db.Column(db.String(10))
     cpf = db.Column(db.String(11))
     celular = db.Column(db.String(11))
@@ -24,9 +25,32 @@ class Cliente(BaseModel):
     endereco = db.Column(db.String(200))
 
     # Relacionamentos
-    mercado = db.Column(db.Integer, db.Foreignkey("supermercado.id")) 
-    '''entregador 
-    entrega 
-    produto 
-    suporte''' 
+    
+    # 1 para muitos
+    mercado = db.Column(db.Integer, db.ForeignKey("supermercado.id"))
+    
+    # muito para muito
+    entregadores = db.relationship("Entregador", secondary="entregador_cliente", backref="cliente_dos_entregadores")
+
+    # 1 para 1
+    entrega_mercado = db.relationship("Entrega", backref="cliente", uselist=False)
+    
+    # muito para muito
+    #produtos = db.Column()
+    
+    # 1 para muitos
+    suporte_mercado = db.Column(db.Integer, db.ForeignKey("suporte.id"))
+
+# muito para muito
+#entregadores 
+
+class EntregadorECliente(BaseModel):
+    __tablename__ = "entregador_cliente"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    entregadores = db.Column(db.Integer, db.ForeignKey("entregador.id"))
+    clientes = db.Column(db.Integer, db.ForeignKey("cliente.id"))
+
+
 
